@@ -1,0 +1,67 @@
+{% comment %}
+  KISSsoft Shop Gate Snippet
+  Include this at the TOP of theme.liquid, inside <head> or at start of <body>.
+
+  Usage in theme.liquid:
+    {% render 'kisssoft-gate' %}
+
+  This snippet:
+  1. Reads the ks_session cookie
+  2. If missing/invalid AND current page is not the login page → redirect to login
+  3. Caches the verify result in localStorage for 5 minutes to reduce API calls
+{% endcomment %}
+
+<script>
+(function() {
+  var MIDDLEWARE_URL = 'https://tall-apples-feel.loca.lt';
+  var COOKIE_NAME = 'ks_session';
+  var LOGIN_PATH = '/pages/login';
+  var CACHE_KEY = 'ks_verified_until';
+  var CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in ms
+
+  // Never gate the login page itself or checkout
+  var path = window.location.pathname;
+  if (path === LOGIN_PATH || path.startsWith('/checkout') || path.startsWith('/cart')) return;
+
+  function getCookie(name) {
+    var match = document.cookie.split(';').find(function(c) {
+      return c.trim().startsWith(name + '=');
+    });
+    return match ? decodeURIComponent(match.split('=')[1] || '') : null;
+  }
+
+  function redirectToLogin() {
+    var redirect = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.replace(LOGIN_PATH + '?redirect=' + redirect);
+  }
+
+  var token = getCookie(COOKIE_NAME);
+  if (!token) { redirectToLogin(); return; }
+
+  // Check localStorage cache first
+  var cachedUntil = parseInt(localStorage.getItem(CACHE_KEY) || '0', 10);
+  if (Date.now() < cachedUntil) return; // still valid, no API call needed
+
+  // Verify token with middleware
+  fetch(MIDDLEWARE_URL + '/api/auth/verify', {
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + token },
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    if (data.valid) {
+      localStorage.setItem(CACHE_KEY, String(Date.now() + CACHE_DURATION));
+    } else {
+      // Clear invalid session
+      document.cookie = COOKIE_NAME + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      localStorage.removeItem(CACHE_KEY);
+      redirectToLogin();
+    }
+  })
+  .catch(function() {
+    // On network error: allow access (fail open) to avoid locking out users
+    // Change to redirectToLogin() if you prefer fail-closed
+    localStorage.setItem(CACHE_KEY, String(Date.now() + CACHE_DURATION));
+  });
+})();
+</script>

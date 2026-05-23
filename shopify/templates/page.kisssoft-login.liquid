@@ -1,0 +1,270 @@
+{% comment %}
+  KISSsoft Shop Login Gate
+  Template: page.kisssoft-login
+  Deploy: Shopify Admin → Online Store → Themes → Edit code → templates/page.kisssoft-login.liquid
+  Create a page in Shopify with handle "login" and assign this template.
+{% endcomment %}
+
+{% assign middleware_url = 'https://tall-apples-feel.loca.lt' %}
+
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} — {{ shop.name }}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #f4f4f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .logo img {
+      height: 48px;
+      width: auto;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 15px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      color: #111;
+      background: #fff;
+    }
+
+    input:focus {
+      border-color: #e60012;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      background: #e60012;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.15s, opacity 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: #c4000f;
+    }
+
+    .error-box {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+
+    .error-box.visible {
+      display: block;
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
+      margin-top: 28px;
+      line-height: 1.5;
+    }
+
+    .footer-note a {
+      color: #6b7280;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      {% if shop.logo %}
+        <img src="{{ shop.logo | img_url: '200x' }}" alt="{{ shop.name }}">
+      {% else %}
+        <strong style="font-size:20px;color:#e60012;">{{ shop.name }}</strong>
+      {% endif %}
+    </div>
+
+    <h1>
+      {% if request.locale.iso_code == 'de' %}
+        Shop-Zugang
+      {% else %}
+        Shop Access
+      {% endif %}
+    </h1>
+    <p class="subtitle">
+      {% if request.locale.iso_code == 'de' %}
+        Bitte melden Sie sich mit Ihrem MyKISSsoft-Konto an.
+      {% else %}
+        Please sign in with your MyKISSsoft account.
+      {% endif %}
+    </p>
+
+    <form id="login-form" autocomplete="on" novalidate>
+      <div class="field">
+        <label for="email">
+          {% if request.locale.iso_code == 'de' %}E-Mail-Adresse{% else %}Email address{% endif %}
+        </label>
+        <input type="email" id="email" name="email" autocomplete="email" required
+          placeholder="name@company.com">
+      </div>
+
+      <div class="field">
+        <label for="password">
+          {% if request.locale.iso_code == 'de' %}Passwort{% else %}Password{% endif %}
+        </label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">
+        {% if request.locale.iso_code == 'de' %}Anmelden{% else %}Sign in{% endif %}
+      </button>
+
+      <div class="error-box" id="error-box"></div>
+    </form>
+
+    <p class="footer-note">
+      {% if request.locale.iso_code == 'de' %}
+        Noch kein Konto? <a href="https://www.kisssoft.com/mykisssoft/" target="_blank" rel="noopener">MyKISSsoft registrieren</a>
+      {% else %}
+        No account yet? <a href="https://www.kisssoft.com/mykisssoft/" target="_blank" rel="noopener">Register for MyKISSsoft</a>
+      {% endif %}
+    </p>
+  </div>
+
+  <script>
+    const MIDDLEWARE_URL = '{{ middleware_url }}';
+    const COOKIE_NAME = 'ks_session';
+    const COOKIE_MAX_AGE = 8 * 60 * 60; // 8 hours in seconds
+
+    function setCookie(name, value, seconds) {
+      const expires = new Date(Date.now() + seconds * 1000).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+    }
+
+    const form = document.getElementById('login-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorBox = document.getElementById('error-box');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.classList.remove('visible');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '...';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch(`${MIDDLEWARE_URL}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.token) {
+          setCookie(COOKIE_NAME, data.token, COOKIE_MAX_AGE);
+          // Clear localStorage cache so gate re-verifies immediately
+          localStorage.removeItem('ks_verified_until');
+          const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+          window.location.replace(redirect);
+          return;
+        }
+
+        errorBox.textContent = data.message || 'Login failed. Please try again.';
+        errorBox.classList.add('visible');
+      } catch {
+        errorBox.textContent = 'Connection error. Please try again later.';
+        errorBox.classList.add('visible');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '{{ request.locale.iso_code == "de" ? "Anmelden" : "Sign in" }}';
+      }
+    });
+
+    // If already logged in, skip login page
+    (function checkExistingSession() {
+      const cookie = document.cookie.split(';').find((c) => c.trim().startsWith('{{ COOKIE_NAME }}='));
+      if (!cookie) return;
+      const token = decodeURIComponent(cookie.split('=')[1] || '');
+      if (!token) return;
+      const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+      window.location.replace(redirect);
+    })();
+  </script>
+</body>
+</html>
