@@ -162,18 +162,6 @@
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
     }
 
-    .footer-note {
-      font-size: clamp(11px, 2vw, 13px);
-      color: #9ca3af;
-      text-align: center;
-      margin-top: clamp(16px, 3vw, 24px);
-      line-height: 1.5;
-    }
-
-    .footer-note a {
-      color: #007AC2;
-      text-decoration: underline;
-    }
 
     @media (max-width: 480px) {
       body { padding: 0 10%; }
@@ -241,13 +229,6 @@
       </div>
     </form>
 
-    <p class="footer-note">
-      {% if request.locale.iso_code == 'de' %}
-        Noch kein Konto? <a href="https://www.kisssoft.com/mykisssoft/" target="_blank" rel="noopener">MyKISSsoft registrieren</a>
-      {% else %}
-        No account yet? <a href="https://www.kisssoft.com/mykisssoft/" target="_blank" rel="noopener">Register for MyKISSsoft</a>
-      {% endif %}
-    </p>
   </div>
 
   <script>
@@ -258,8 +239,8 @@
     const LABEL_SUBMIT = IS_DE ? 'Anmelden' : 'Sign in';
     const LABEL_LOADING = IS_DE ? 'Wird überprüft …' : 'Verifying …';
     const MSG_INVALID = IS_DE
-      ? 'E-Mail oder Passwort ist falsch.'
-      : 'Invalid email or password.';
+      ? 'E-Mail-Adresse oder Passwort ist nicht korrekt.'
+      : 'Incorrect email address or password.';
     const MSG_REGION = IS_DE
       ? 'Zugang ist in Ihrer Region nicht verfügbar.'
       : 'Access is not available in your region.';
