@@ -252,8 +252,8 @@
 
   <script>
     const MIDDLEWARE_URL = '{{ middleware_url }}';
-    const COOKIE_NAME = 'ks_session';
-    const COOKIE_MAX_AGE = 8 * 60 * 60;
+    const COOKIE_NAME = 'kiss_session';
+    const COOKIE_MAX_AGE = 12 * 60 * 60;
     const IS_DE = '{{ request.locale.iso_code }}' === 'de';
     const LABEL_SUBMIT = IS_DE ? 'Anmelden' : 'Sign in';
     const LABEL_LOADING = IS_DE ? 'Wird überprüft …' : 'Verifying …';
@@ -320,10 +320,10 @@
           return;
         }
 
-        const raw = (data.message || '').toLowerCase();
-        if (raw.includes('region') || raw.includes('country')) {
+        const code = data.code || '';
+        if (code === 'geo_blocked') {
           showError(MSG_REGION);
-        } else if (raw.includes('unavailable') || raw.includes('temporarily')) {
+        } else if (code === 'upstream_unreachable') {
           showError(MSG_SERVER);
         } else {
           showError(MSG_INVALID);
