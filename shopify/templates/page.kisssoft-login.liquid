@@ -1,3 +1,4 @@
+{% layout none %}
 {% comment %}
   KISSsoft Shop Login Gate
   Template: page.kisssoft-login
@@ -13,71 +14,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page.title }} — {{ shop.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0 !important; }
+
+    html, body {
+      height: 100%;
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
       background: #f4f4f5;
-      min-height: 100vh;
+      min-height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
     }
 
     .card {
       background: #fff;
-      border-radius: 12px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      padding: 48px 40px;
+      padding: clamp(20px, 5vw, 44px) clamp(18px, 5vw, 40px);
       width: 100%;
       max-width: 420px;
+      margin: 0 auto;
     }
 
     .logo {
       display: flex;
       justify-content: center;
-      margin-bottom: 32px;
+      margin-bottom: clamp(20px, 4vw, 28px);
     }
 
     .logo img {
-      height: 48px;
+      height: clamp(36px, 6vw, 48px);
       width: auto;
     }
 
     h1 {
-      font-size: 22px;
+      font-size: clamp(19px, 4vw, 24px);
       font-weight: 700;
       color: #111;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       text-align: center;
     }
 
     .subtitle {
-      font-size: 14px;
+      font-size: clamp(13px, 2.5vw, 15px);
       color: #6b7280;
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: clamp(18px, 4vw, 28px);
       line-height: 1.5;
     }
 
     label {
       display: block;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: clamp(12px, 2.2vw, 14px);
+      font-weight: 500;
       color: #374151;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     input[type="email"],
     input[type="password"] {
       display: block;
       width: 100%;
-      padding: 10px 14px;
-      font-size: 15px;
+      padding: clamp(9px, 2vw, 11px) 14px;
+      font-size: clamp(14px, 2.5vw, 16px);
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
       border: 1.5px solid #d1d5db;
-      border-radius: 8px;
       outline: none;
       transition: border-color 0.15s;
       color: #111;
@@ -85,27 +92,27 @@
     }
 
     input:focus {
-      border-color: #e60012;
+      border-color: #007AC2;
     }
 
     .field {
-      margin-bottom: 18px;
+      margin-bottom: clamp(12px, 2.5vw, 16px);
     }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 12px;
-      font-size: 15px;
+      padding: clamp(10px, 2.5vw, 13px);
+      font-size: clamp(14px, 2.5vw, 16px);
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
       font-weight: 700;
       color: #fff;
-      background: #e60012;
+      background: #007AC2;
       border: none;
-      border-radius: 8px;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 6px;
       transition: background 0.15s, opacity 0.15s;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
     }
 
     .btn:disabled {
@@ -114,36 +121,70 @@
     }
 
     .btn:hover:not(:disabled) {
-      background: #c4000f;
+      background: #005f99;
     }
 
     .error-box {
       display: none;
       background: #fef2f2;
-      border: 1px solid #fecaca;
+      border-left: 4px solid #b91c1c;
       color: #b91c1c;
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 13px;
-      margin-top: 16px;
+      padding: clamp(10px, 2vw, 12px) 14px;
+      font-size: clamp(12px, 2.2vw, 14px);
+      margin-top: 14px;
       line-height: 1.5;
     }
 
     .error-box.visible {
-      display: block;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .error-icon {
+      flex-shrink: 0;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .error-text { flex: 1; }
+
+    .error-retry {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: clamp(11px, 2vw, 13px);
+      color: #007AC2;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
     }
 
     .footer-note {
-      font-size: 12px;
+      font-size: clamp(11px, 2vw, 13px);
       color: #9ca3af;
       text-align: center;
-      margin-top: 28px;
+      margin-top: clamp(16px, 3vw, 24px);
       line-height: 1.5;
     }
 
     .footer-note a {
-      color: #6b7280;
+      color: #007AC2;
       text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 0 10%; }
+      .card { padding-top: 10%; padding-bottom: 10%; }
+    }
+
+    @media (max-height: 600px) {
+      .logo { margin-bottom: 12px; }
+      .logo img { height: 30px; }
+      .subtitle { margin-bottom: 12px; }
+      .field { margin-bottom: 10px; }
     }
   </style>
 </head>
@@ -153,7 +194,7 @@
       {% if shop.logo %}
         <img src="{{ shop.logo | img_url: '200x' }}" alt="{{ shop.name }}">
       {% else %}
-        <strong style="font-size:20px;color:#e60012;">{{ shop.name }}</strong>
+        <strong style="font-size:22px;color:#007AC2;">{{ shop.name }}</strong>
       {% endif %}
     </div>
 
@@ -192,7 +233,12 @@
         {% if request.locale.iso_code == 'de' %}Anmelden{% else %}Sign in{% endif %}
       </button>
 
-      <div class="error-box" id="error-box"></div>
+      <div class="error-box" id="error-box" role="alert">
+        <span class="error-icon">⚠</span>
+        <div class="error-text">
+          <span id="error-msg"></span>
+        </div>
+      </div>
     </form>
 
     <p class="footer-note">
@@ -207,7 +253,22 @@
   <script>
     const MIDDLEWARE_URL = '{{ middleware_url }}';
     const COOKIE_NAME = 'ks_session';
-    const COOKIE_MAX_AGE = 8 * 60 * 60; // 8 hours in seconds
+    const COOKIE_MAX_AGE = 8 * 60 * 60;
+    const IS_DE = '{{ request.locale.iso_code }}' === 'de';
+    const LABEL_SUBMIT = IS_DE ? 'Anmelden' : 'Sign in';
+    const LABEL_LOADING = IS_DE ? 'Wird überprüft …' : 'Verifying …';
+    const MSG_INVALID = IS_DE
+      ? 'E-Mail oder Passwort ist falsch.'
+      : 'Invalid email or password.';
+    const MSG_REGION = IS_DE
+      ? 'Zugang ist in Ihrer Region nicht verfügbar.'
+      : 'Access is not available in your region.';
+    const MSG_NETWORK = IS_DE
+      ? 'Verbindungsfehler — bitte Internetverbindung prüfen und erneut versuchen.'
+      : 'Connection error — please check your internet connection and try again.';
+    const MSG_SERVER = IS_DE
+      ? 'Serverfehler — bitte später erneut versuchen.'
+      : 'Server error — please try again later.';
 
     function setCookie(name, value, seconds) {
       const expires = new Date(Date.now() + seconds * 1000).toUTCString();
@@ -217,12 +278,22 @@
     const form = document.getElementById('login-form');
     const submitBtn = document.getElementById('submit-btn');
     const errorBox = document.getElementById('error-box');
+    const errorMsg = document.getElementById('error-msg');
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorBox.classList.add('visible');
+    }
+
+    function hideError() {
+      errorBox.classList.remove('visible');
+    }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      errorBox.classList.remove('visible');
+      hideError();
       submitBtn.disabled = true;
-      submitBtn.textContent = '...';
+      submitBtn.textContent = LABEL_LOADING;
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -234,33 +305,41 @@
           body: JSON.stringify({ email, password }),
         });
 
+        if (!res.ok) {
+          showError(MSG_SERVER);
+          return;
+        }
+
         const data = await res.json();
 
         if (data.success && data.token) {
           setCookie(COOKIE_NAME, data.token, COOKIE_MAX_AGE);
-          // Clear localStorage cache so gate re-verifies immediately
           localStorage.removeItem('ks_verified_until');
           const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
           window.location.replace(redirect);
           return;
         }
 
-        errorBox.textContent = data.message || 'Login failed. Please try again.';
-        errorBox.classList.add('visible');
+        const raw = (data.message || '').toLowerCase();
+        if (raw.includes('region') || raw.includes('country')) {
+          showError(MSG_REGION);
+        } else if (raw.includes('unavailable') || raw.includes('temporarily')) {
+          showError(MSG_SERVER);
+        } else {
+          showError(MSG_INVALID);
+        }
       } catch {
-        errorBox.textContent = 'Connection error. Please try again later.';
-        errorBox.classList.add('visible');
+        showError(MSG_NETWORK);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = '{{ request.locale.iso_code == "de" ? "Anmelden" : "Sign in" }}';
+        submitBtn.textContent = LABEL_SUBMIT;
       }
     });
 
-    // If already logged in, skip login page
     (function checkExistingSession() {
-      const cookie = document.cookie.split(';').find((c) => c.trim().startsWith('{{ COOKIE_NAME }}='));
-      if (!cookie) return;
-      const token = decodeURIComponent(cookie.split('=')[1] || '');
+      const match = document.cookie.split(';').find((c) => c.trim().startsWith('ks_session='));
+      if (!match) return;
+      const token = decodeURIComponent(match.split('=')[1] || '');
       if (!token) return;
       const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
       window.location.replace(redirect);

@@ -51,9 +51,10 @@ router.post('/login', async (req, res) => {
 
   } catch (err) {
     logger.error('KISSsoft API error', { email, error: err.message });
-    return res.status(502).json({
+    // Always return 200 so Cloudflare doesn't strip CORS headers from 5xx responses.
+    return res.status(200).json({
       success: false,
-      message: 'Authentication service temporarily unavailable. Please try again.',
+      message: 'Authentication service temporarily unavailable. Please try again later.',
     });
   }
 });
