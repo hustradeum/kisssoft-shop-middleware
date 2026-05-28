@@ -24,10 +24,18 @@ async function authenticateUser(email, password) {
 
   logger.info('KISSsoft API request', { email, url: KISSSOFT_API_URL });
 
-  const response = await axios.get(url.toString(), { timeout: 10000 });
-  const data = response.data;
+  let response;
+  try {
+    response = await axios.get(url.toString(), { timeout: 10000 });
+  } catch (err) {
+    const body = err.response?.data;
+    const status = err.response?.status;
+    logger.error('KISSsoft API http error', { email, status, body });
+    throw err;
+  }
 
-  logger.info('KISSsoft API response', { email, status: data.status });
+  const data = response.data;
+  logger.info('KISSsoft API response', { email, status: data.status, fields: data.fields });
 
   return data;
 }
