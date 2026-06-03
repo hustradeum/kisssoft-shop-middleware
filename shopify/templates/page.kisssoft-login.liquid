@@ -239,17 +239,17 @@
     const LABEL_SUBMIT = IS_DE ? 'Anmelden' : 'Sign in';
     const LABEL_LOADING = IS_DE ? 'Wird überprüft …' : 'Verifying …';
     const MSG_INVALID = IS_DE
-      ? 'E-Mail-Adresse oder Passwort ist nicht korrekt.'
-      : 'Incorrect email address or password.';
+      ? '<strong>Zugang verweigert - MyKISSsoft-Login erforderlich</strong><br><br>Um auf den KISSsoft-Webshop zuzugreifen, ist ein gültiges MyKISSsoft-Konto erforderlich.<br><br>Falls Sie noch kein MyKISSsoft-Konto besitzen, registrieren Sie sich bitte zuerst. Nach Erstellung und Aktivierung Ihres Kontos können Sie den Webshop nutzen.<br><br><em>Bei Fragen wenden Sie sich bitte an Ihren KISSsoft-Ansprechpartner.</em>'
+      : '<strong>Access Restricted - MyKISSsoft Login Required</strong><br><br>To access the KISSsoft webshop, a valid MyKISSsoft account is required.<br><br>If you do not have a MyKISSsoft account yet, please register first to request access. Once your account has been created and activated, you will be able to enter the webshop.<br><br><em>Please contact your KISSsoft contact partner if you have any questions.</em>';
     const MSG_REGION = IS_DE
-      ? 'Zugang ist in Ihrer Region nicht verfügbar.'
-      : 'Access is not available in your region.';
+      ? '<strong>Zugang eingeschränkt - Service in Ihrer Region nicht verfügbar</strong><br><br>Der Zugang zu diesem Webshop ist aus Ihrem Land oder Ihrer Region derzeit nicht möglich.<br><br>Falls Sie glauben, dass diese Einschränkung fälschlicherweise angewendet wurde, wenden Sie sich bitte an Ihren KISSsoft-Ansprechpartner.<br><br><em>Wir danken für Ihr Verständnis.</em>'
+      : '<strong>Access Restricted - Service Not Available in Your Region</strong><br><br>We regret to inform you that access to this webshop is currently not available from your country or region.<br><br>If you believe this restriction has been applied in error, please contact your KISSsoft contact partner for further assistance.<br><br><em>Thank you for your understanding.</em>';
     const MSG_NETWORK = IS_DE
-      ? 'Verbindungsfehler — bitte Internetverbindung prüfen und erneut versuchen.'
-      : 'Connection error — please check your internet connection and try again.';
+      ? 'Verbindungsfehler - bitte Internetverbindung prüfen und erneut versuchen.'
+      : 'Connection error - please check your internet connection and try again.';
     const MSG_SERVER = IS_DE
-      ? 'Serverfehler — bitte später erneut versuchen.'
-      : 'Server error — please try again later.';
+      ? 'Serverfehler - bitte später erneut versuchen.'
+      : 'Server error - please try again later.';
 
     function setCookie(name, value, seconds) {
       const expires = new Date(Date.now() + seconds * 1000).toUTCString();
@@ -262,7 +262,7 @@
     const errorMsg = document.getElementById('error-msg');
 
     function showError(msg) {
-      errorMsg.textContent = msg;
+      errorMsg.innerHTML = msg;
       errorBox.classList.add('visible');
     }
 
