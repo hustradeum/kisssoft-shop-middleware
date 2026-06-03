@@ -286,11 +286,6 @@
           body: JSON.stringify({ email, password }),
         });
 
-        if (!res.ok) {
-          showError(MSG_SERVER);
-          return;
-        }
-
         const data = await res.json();
 
         if (data.success && data.token) {
