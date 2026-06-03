@@ -32,7 +32,7 @@ async function authenticateUser(email, password) {
     console.warn(
       `[KISSSOFT-500] ${new Date().toISOString()} email=${email} httpStatus=${response.status}`
     );
-    return { status: 'approved', user: {}, _upstream500: true };
+    return { status: 'restricted' };
   }
 
   return response.data;

@@ -26,6 +26,10 @@ async function loginHandler(req, res) {
     return res.status(502).json({ success: false, code: 'upstream_unreachable' });
   }
 
+  if (result.status === 'restricted') {
+    return res.status(403).json({ success: false, code: 'geo_blocked' });
+  }
+
   if (result.status !== 'approved') {
     return res.status(401).json({ success: false, code: 'denied' });
   }
